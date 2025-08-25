@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindBridge - AI-Powered Human Insight Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 25%, #2d1b69 50%, #1e3c72 75%, #000428 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(120, 198, 121, 0.3) 0%, transparent 50%);
+            animation: backgroundPulse 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(120, 119, 198, 0.6);
+            border-radius: 50%;
+            animation: float 25s infinite linear;
+            box-shadow: 0 0 10px rgba(120, 119, 198, 0.8);
+        }
+
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0); 
+                opacity: 0; 
+            }
+            10% { 
+                opacity: 1; 
+                transform: translateY(90vh) translateX(10px) rotate(36deg) scale(1);
+            }
+            90% { 
+                opacity: 1; 
+                transform: translateY(10vh) translateX(-10px) rotate(324deg) scale(1);
+            }
+            100% { 
+                transform: translateY(-10vh) translateX(0) rotate(360deg) scale(0); 
+                opacity: 0; 
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header with Advanced Animation */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: headerRise 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes headerRise {
+            0% { 
+                opacity: 0; 
+                transform: translateY(-50px) scale(0.8) rotateX(20deg); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1) rotateX(0deg); 
+            }
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: logoGlow 3s ease-in-out infinite, logoShift 8s linear infinite;
+            margin-bottom: 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotateY(10deg);
+        }
+
+        .tagline {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.9);
+            opacity: 0;
+            animation: taglineFade 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes taglineFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 0.9; transform: translateY(0); }
+        }
+
+        /* Modern Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.2rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: navSlide 1s ease-out 0.3s both;
+        }
+
+        @keyframes navSlide {
+            from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            font-weight: 600;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-links a.active {
+            background: rgba(102, 126, 234, 0.3);
+            color: #ffffff;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: heroFloat 1.5s ease-out 0.8s both;
+        }
+
+        @keyframes heroFloat {
+            from { opacity: 0; transform: translateY(40px) rotateX(10deg); }
+            to { opacity: 1; transform: translateY(0) rotateX(0deg); }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textShimmer 6s ease infinite;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        @keyframes textShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Upload Section with Morphing Effect */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            padding: 4rem;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 4rem;
+            border: 2px solid transparent;
+            background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+                             linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: uploadPulse 4s ease-in-out infinite, sectionRise 1s ease-out 1.2s both;
+        }
+
+        @keyframes sectionRise {
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes uploadPulse {
+            0%, 100% { 
+                box-shadow: 0 10px 40px rgba(102, 126, 234, 0.2);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 20px 60px rgba(245, 87, 108, 0.3);
+                transform: scale(1.02);
+            }
+        }
+
+        .upload-section:hover {
+            transform: translateY(-10px) rotateX(2deg);
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.4);
+        }
+
+        .upload-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            animation: iconFloat 3s ease-in-out infinite, iconGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0) rotateZ(0deg); }
+            50% { transform: translateY(-15px) rotateZ(5deg); }
+        }
+
+        @keyframes iconGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6));
+            }
+            50% { 
+                filter: drop-shadow(0 0 40px rgba(245, 87, 108, 0.8));
+            }
+        }
+
+        .upload-section h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Modern Button */
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: #ffffff;
+            border: none;
+            padding: 1.5rem 3rem;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0.5rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(45deg, #764ba2, #f093fb);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            transform: none;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            text-align: center;
+            font-weight: 500;
+            animation: statusSlide 0.5s ease;
+        }
+
+        @keyframes statusSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.5);
+            color: #4CAF50;
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            color: #f44336;
+        }
+
+        /* Dashboard Grid - FIXED LAYOUT */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Enhanced Cards - FIXED STYLING */
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: cardSlide 0.8s ease-out both;
+            min-height: 300px;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes cardSlide {
+            from { 
+                opacity: 0; 
+                transform: translateY(60px) rotateX(15deg) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) rotateX(0deg) scale(1); 
+            }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.8s;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            border-radius: 24px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover::after {
+            opacity: 0.3;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) rotateX(5deg) scale(1.03);
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.4);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.15);
+            border-radius: 12px;
+            animation: iconPulse 3s ease-in-out infinite;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover .card-icon {
+            transform: rotateY(20deg) scale(1.1);
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(245, 87, 108, 0.5); }
+        }
+
+        /* Enhanced Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(245, 87, 108, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #667eea, #f5576c);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Content Styling */
+        .card-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        .card-content p {
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+                             linear-gradient(45deg, #667eea, #f5576c);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            transition: all 0.3s ease;
+        }
+
+        .card-content p:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(10px);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.active {
+            display: block;
+            animation: loadingFade 0.3s ease;
+        }
+
+        @keyframes loadingFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Data Display */
+        .data-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background: rgba(102, 126, 234, 0.2);
+            font-weight: 600;
+        }
+
+        .data-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sentiment-positive { color: #4ade80; }
+        .sentiment-negative { color: #f87171; }
+        .sentiment-neutral { color: #94a3b8; }
+
+        /* Emotion display styles */
+        .emotion-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .emotion-tag {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .emotion-tag:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Section visibility */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: sectionFade 0.5s ease;
+        }
+
+        @keyframes sectionFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Connection Status */
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .connection-status.online {
+            color: #4ade80;
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+
+        .connection-status.offline {
+            color: #f87171;
+            border-color: rgba(248, 113, 113, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 3rem; }
+            .hero h1 { font-size: 3rem; }
+            .nav-links { 
+                flex-direction: column; 
+                gap: 1rem;
+                align-items: center; 
+            }
+            .container { padding: 1rem; }
+            .dashboard { 
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .stats-grid { 
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+            .upload-section { padding: 2rem; }
+            .card { 
+                padding: 1.5rem;
+                min-height: auto;
+            }
+        }
+
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Connection Status -->
+    <div class="connection-status" id="connection-status">
+        🔄 Connecting...
+    </div>
+
+    <!-- Animated Particles -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 9s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 12s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 15s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 18s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 21s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 24s;"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">🧠 MindBridge</div>
+            <div class="tagline">AI-Powered Human Insight Platform - Now with n8n & Groq</div>
+        </header>
+
+        <!-- Navigation -->
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showSection('dashboard')" id="nav-dashboard" class="active">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('input')" id="nav-input">Add Data</a></li>
+                <li><a href="#" onclick="showSection('analytics')" id="nav-analytics">Analytics</a></li>
+                <li><a href="#" onclick="showSection('insights')" id="nav-insights">Insights</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Understanding Human Connection</h1>
+            <p>Advanced AI technology powered by n8n automation and Groq that bridges the gap between digital communication and genuine human understanding. Analyze sentiment, emotion, and meaning to build deeper connections.</p>
+        </section>
+
+        <!-- Status Messages Container -->
+        <div id="status-container"></div>
+
+        <!-- Input Section -->
+        <section id="input-section" class="section upload-section scroll-reveal">
+            <div class="upload-icon">📝</div>
+            <h3>Add Customer Message</h3>
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="customer-message">Customer Message:</label>
+                    <textarea id="customer-message" placeholder="Enter customer message here for AI analysis..." required></textarea>
+                </div>
+            </div>
+            <button class="btn" id="submit-btn" onclick="submitMessage()">🧠 Analyze with n8n + Groq</button>
+            <button class="btn" onclick="refreshData()">🔄 Refresh Dashboard</button>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processing with n8n automation & Groq AI...</p>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <div class="dashboard section active" id="dashboard-section">
+            <!-- Sentiment Analysis -->
+            <div class="card scroll-reveal">
+                <h3 class="card-title">
+                    <span class="card-icon">❤️</span>
+                    Sentiment Analysis
+                </h3>
+                <div class="card-content">
+                    <div class="stats-grid" id="sentiment-stats">
+                        <div class="stat-card">
+                            <span class="stat-number" id="positive-percent">33%</span>
+                            <div class="stat-label">Positive</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="neutral-percent">33%</span>
+                            <div class="stat-label">Neutral</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="negative-percent">33%</span>
+                            <div class="stat-label">Negative</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emotion Detection -->
+            <div class="card scroll-reveal">
+                <h3 class="card-title">
+                    <span class="card-icon">😊</span>
+                    Emotion Detection
+                </h3>
+                <div class="card-content" id="emotion-content">
+                    <p><strong>Top Emotions Detected:</strong></p>
+                    <div class="emotion-list" id="emotion-list">
+                        <span class="emotion-tag">Joy (1)</span>
+                        <span class="emotion-tag">Anger (1)</span>
+                        <span class="emotion-tag">Neutral (1)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Insights -->
+            <div class="card scroll-reveal">
+                <h3 class="card-title">
+                    <span class="card-icon">👥</span>
+                    Customer Insights
+                </h3>
+                <div class="card-content" id="insights-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number" id="total-messages">3</span>
+                            <div class="stat-label">Messages</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="avg-rating">3.2</span>
+                            <div class="stat-label">Avg Rating</div>
+                        </div>
+                    </div>
+                    <p><strong>Key Themes:</strong></p>
+                    <p id="key-themes">Generally satisfied customers, Mixed feedback patterns</p>
+                </div>
+            </div>
+
+            <!-- Real-time Alerts -->
+            <div class="card scroll-reveal">
+                <h3 class="card-title">
+                    <span class="card-icon">🚨</span>
+                    Alert System
+                </h3>
+                <div class="card-content" id="alerts-content">
+                    <div id="alert-status" class="alert-status">
+                        <p>✅ All systems normal</p>
+                        <p style="opacity: 0.7; font-size: 0.9rem;">Last checked: <span id="last-check">Just now</span></p>
+                    </div>
+                    <div class="alert-settings">
+                        <p><strong>Alert Thresholds:</strong></p>
+                        <p>• Negative sentiment > 40%</p>
+                        <p>• 3+ negative messages/hour</p>
+                        <p>• Critical keywords detected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Messages -->
+            <div class="card scroll-reveal">
+                <h3 class="card-title">
+                    <span class="card-icon">💬</span>
+                    Recent Analysis
+                </h3>
+                <div class="card-content">
+                    <div class="data-table" id="recent-messages">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Message Preview</th>
+                                    <th>Sentiment</th>
+                                    <th>Emotion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="messages-tbody">
+                                <tr>
+                                    <td>2 min ago</td>
+                                    <td>Your product is amazing! Love...</td>
+                                    <td><span class="sentiment-positive">Positive</span></td>
+                                    <td>Joy</td>
+                                </tr>
+                                <tr>
+                                    <td>5 min ago</td>
+                                    <td>The app keeps crashing, very...</td>
+                                    <td><span class="sentiment-negative">Negative</span></td>
+                                    <td>Anger</td>
+                                </tr>
+                                <tr>
+                                    <td>8 min ago</td>
+                                    <td>Good service, could be impro...</td>
+                                    <td><span class="sentiment-neutral">Neutral</span></td>
+                                    <td>Neutral</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- n8n Processing Status -->
+            <div class="card scroll-reveal">
+                <h3 class="card-title">
+                    <span class="card-icon">🔗</span>
+                    n8n Automation Status
+                </h3>
+                <div class="card-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number" id="processing-speed">1.2s</span>
+                            <div class="stat-label">Avg Speed</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="accuracy-rate">95%</span>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                    </div>
+                    <p><strong>Automation Stack:</strong></p>
+                    <p>• n8n Workflow Engine</p>
+                    <p>• Groq Cloud API</p>
+                    <p>• Llama 3.3 70B Model</p>
+                    <p>• Real-time Webhooks</p>
+                    <p style="opacity: 0.7; font-size: 0.9rem; margin-top: 1rem;">
+                        Status: <span id="n8n-status">🟢 Online</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="section" id="analytics-section">
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="card-icon">📊</span>
+                    Advanced Analytics
+                </h3>
+                <div class="card-content">
+                    <p>Detailed analytics and reporting features coming soon...</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number" id="weekly-growth">+12%</span>
+                            <div class="stat-label">Weekly Growth</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number" id="response-time">0.8s</span>
+                            <div class="stat-label">Response Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Section -->
+        <div class="section" id="insights-section">
+            <div class="card">
+                <h3 class="card-title">
+                    <span class="card-icon">🔍</span>
+                    Deep Insights
+                </h3>
+                <div class="card-content">
+                    <p>AI-powered insights and recommendations based on your data patterns...</p>
+                    <div id="ai-insights">
+                        <p>• Most customers express positive emotions during morning hours</p>
+                        <p>• Response quality improves with personalized acknowledgment</p>
+                        <p>• Key satisfaction drivers: Speed, accuracy, empathy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 2rem; opacity: 0.7;">
+            <p>&copy; 2024 MindBridge AI Platform. Powered by n8n automation & Groq AI. Connecting technology with human understanding.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration - Updated with your actual n8n webhook URLs
+const N8N_CONFIG = {
+    // Your actual n8n webhook endpoints
+    ANALYZE_URL: 'https://ankanbh1.app.n8n.cloud/webhook-test/analyze-sentiment',
+GET_DATA_URL: 'https://ankanbh1.app.n8n.cloud/webhook-test/get-messages', // We'll create this next
+    // Switch to production mode
+    DEMO_MODE: false
+};
+
+let messagesData = [];
+let currentSection = 'dashboard';
+
+// Initialize particles
+function createParticles() {
+    const particles = document.querySelector('.particles');
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 25 + 's';
+        particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+        particles.appendChild(particle);
+    }
+}
+
+// Status message helper
+function showStatus(message, isError = false) {
+    const container = document.getElementById('status-container');
+    const statusDiv = document.createElement('div');
+    statusDiv.className = `status-message ${isError ? 'status-error' : 'status-success'}`;
+    statusDiv.textContent = message;
+    
+    container.innerHTML = '';
+    container.appendChild(statusDiv);
+    
+    setTimeout(() => {
+        statusDiv.style.opacity = '0';
+        setTimeout(() => container.innerHTML = '', 300);
+    }, 5000);
+}
+
+// Update connection status
+function updateConnectionStatus(isOnline) {
+    const status = document.getElementById('connection-status');
+    if (isOnline) {
+        status.className = 'connection-status online';
+        status.textContent = '🟢 n8n Connected';
+    } else {
+        status.className = 'connection-status offline';
+        status.textContent = '🔴 n8n Offline';
+    }
+}
+
+// Show different sections
+function showSection(sectionName) {
+    // Update navigation
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.classList.remove('active');
+    });
+    document.getElementById(`nav-${sectionName}`).classList.add('active');
+
+    // Show section
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    const targetSection = document.getElementById(`${sectionName}-section`);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+
+    currentSection = sectionName;
+    
+    // Load data if switching to dashboard
+    if (sectionName === 'dashboard') {
+        setTimeout(refreshData, 300);
+    }
+}
+
+// Submit message for analysis
+async function submitMessage() {
+    const message = document.getElementById('customer-message').value.trim();
+    
+    if (!message) {
+        showStatus('Please enter a customer message', true);
+        return;
+    }
+    
+    const submitBtn = document.getElementById('submit-btn');
+    const loading = document.getElementById('loading');
+    
+    try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processing with n8n...';
+        loading.classList.add('active');
+        document.getElementById('n8n-status').textContent = '🟡 Processing';
+        
+        console.log('Sending to n8n:', N8N_CONFIG.ANALYZE_URL);
+        
+        // Real n8n API call
+        const response = await fetch(N8N_CONFIG.ANALYZE_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                message: message,
+                timestamp: new Date().toISOString()
+            })
+        });
+
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`n8n webhook error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('n8n response:', result);
+        
+        // Handle n8n response format
+        let sentiment, emotion;
+        
+        if (result.sentiment && result.emotion) {
+            // Direct format from n8n
+            sentiment = result.sentiment;
+            emotion = result.emotion;
+        } else if (result.data && result.data.sentiment) {
+            // Nested format
+            sentiment = result.data.sentiment;
+            emotion = result.data.emotion;
+        } else {
+            throw new Error('Invalid response format from n8n');
+        }
+        
+        // Add to local data
+        const newMessage = {
+            timestamp: new Date().toISOString(),
+            message: message,
+            sentiment: sentiment,
+            emotion: emotion
+        };
+        
+        messagesData.unshift(newMessage);
+        
+        // Clear form
+        document.getElementById('customer-message').value = '';
+        
+        // Show success message
+        showStatus(`✅ n8n Analysis Complete! Sentiment: ${sentiment}, Emotion: ${emotion}`);
+        
+        // Update dashboard
+        updateDashboard();
+        updateConnectionStatus(true);
+        
+    } catch (error) {
+        console.error('n8n Error:', error);
+        showStatus('❌ n8n Connection Error: ' + error.message, true);
+        updateConnectionStatus(false);
+        document.getElementById('n8n-status').textContent = '🔴 Error';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🧠 Analyze with n8n + Groq';
+        loading.classList.remove('active');
+        
+        // Reset status after a delay if no error
+        setTimeout(() => {
+            if (document.getElementById('n8n-status').textContent !== '🔴 Error') {
+                document.getElementById('n8n-status').textContent = '🟢 Online';
+            }
+        }, 2000);
+    }
+}
+
+// Process Google Sheets data format
+function processSheetData(rawData) {
+    // Skip header row and process data
+    if (!rawData || rawData.length <= 1) return [];
+    
+    return rawData.slice(1).map(row => {
+        // Google Sheets returns arrays for each row
+        // [timestamp, message, sentiment, confidence, explanation]
+        const [timestamp, message, sentiment, confidence, explanation] = row;
+        
+        return {
+            timestamp: new Date(timestamp).toISOString(),
+            message: message || '',
+            sentiment: sentiment || 'neutral',
+            emotion: explanation || '', // Use explanation as emotion for now
+            confidence: parseFloat(confidence) || 0.5
+        };
+    }).filter(item => item.message); // Filter out empty messages
+}
+
+// Load data from n8n (placeholder for now)
+async function loadData() {
+    try {
+        updateConnectionStatus(true);
+        /*
+        // For now, we'll skip this until we create the GET webhook
+        console.log('GET data webhook not yet created - using local data only');
+        updateDashboard();
+        return;
+        */
+        /* Commented out until we create the GET webhook
+        const response = await fetch(N8N_CONFIG.GET_DATA_URL);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.success) {
+            messagesData = result.data || [];
+            updateDashboard();
+            console.log('Loaded', messagesData.length, 'messages from n8n');
+        } else {
+            throw new Error(result.error || 'Failed to load data');
+        }
+        */
+       const response = await fetch(N8N_CONFIG.GET_DATA_URL);
+
+if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+}
+
+const rawData = await response.json();
+console.log('Raw data from Google Sheets:', rawData);
+
+// Process the Google Sheets data
+messagesData = processSheetData(rawData);
+updateDashboard();
+console.log('Loaded', messagesData.length, 'messages from n8n');
+        
+    } catch (error) {
+        console.error('Error loading data:', error);
+        updateConnectionStatus(false);
+        showStatus('Error loading data from n8n: ' + error.message, true);
+    }
+}
+
+// Refresh dashboard data
+async function refreshData() {
+    try {
+        await loadData();
+        document.getElementById('last-check').textContent = 'Just now';
+        console.log('Dashboard refreshed');
+    } catch (error) {
+        console.error('Error refreshing data:', error);
+    }
+}
+
+// Update dashboard with current data
+function updateDashboard() {
+    updateSentimentStats();
+    updateEmotionDisplay();
+    updateRecentMessages();
+    updateInsights();
+    updateAlertStatus();
+}
+
+// Update sentiment statistics
+function updateSentimentStats() {
+    if (messagesData.length === 0) {
+        document.getElementById('positive-percent').textContent = '0%';
+        document.getElementById('neutral-percent').textContent = '0%';
+        document.getElementById('negative-percent').textContent = '0%';
+        return;
+    }
+    
+    const positive = messagesData.filter(msg => msg.sentiment === 'Positive').length;
+    const negative = messagesData.filter(msg => msg.sentiment === 'Negative').length;
+    const neutral = messagesData.filter(msg => msg.sentiment === 'Neutral').length;
+    const total = messagesData.length;
+    
+    document.getElementById('positive-percent').textContent = Math.round((positive / total) * 100) + '%';
+    document.getElementById('neutral-percent').textContent = Math.round((neutral / total) * 100) + '%';
+    document.getElementById('negative-percent').textContent = Math.round((negative / total) * 100) + '%';
+}
+
+// Update emotion display
+function updateEmotionDisplay() {
+    const emotionList = document.getElementById('emotion-list');
+    
+    if (messagesData.length === 0) {
+        emotionList.innerHTML = '<span class="emotion-tag">No data yet</span>';
+        return;
+    }
+    
+    // Count emotions
+    const emotions = {};
+    messagesData.forEach(msg => {
+        if (msg.emotion && msg.emotion !== 'Error') {
+            emotions[msg.emotion] = (emotions[msg.emotion] || 0) + 1;
+        }
+    });
+    
+    // Sort by count and create tags
+    const sortedEmotions = Object.entries(emotions)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 6);
+    
+    if (sortedEmotions.length === 0) {
+        emotionList.innerHTML = '<span class="emotion-tag">No emotions detected</span>';
+        return;
+    }
+    
+    emotionList.innerHTML = sortedEmotions
+        .map(([emotion, count]) => `<span class="emotion-tag">${emotion} (${count})</span>`)
+        .join('');
+}
+
+// Update recent messages table
+function updateRecentMessages() {
+    const tbody = document.getElementById('messages-tbody');
+    tbody.innerHTML = '';
+    
+    if (messagesData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" style="text-align: center; opacity: 0.7;">
+                    📝 No messages yet. Submit a message above to see analysis results!
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    messagesData.slice(0, 10).forEach(msg => {
+        const row = document.createElement('tr');
+        const preview = msg.message && msg.message.length > 30 ? 
+            msg.message.substring(0, 30) + '...' : (msg.message || 'N/A');
+        
+        const sentiment = msg.sentiment || 'Unknown';
+        const sentimentClass = sentiment.toLowerCase() === 'positive' ? 'sentiment-positive' :
+                             sentiment.toLowerCase() === 'negative' ? 'sentiment-negative' :
+                             'sentiment-neutral';
+        
+        const timestamp = msg.timestamp ? 
+            new Date(msg.timestamp).toLocaleTimeString() + ' ' + new Date(msg.timestamp).toLocaleDateString() : 
+            'N/A';
+        
+        row.innerHTML = `
+            <td>${timestamp}</td>
+            <td>${preview}</td>
+            <td><span class="${sentimentClass}">${sentiment}</span></td>
+            <td>${msg.emotion || 'Unknown'}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
+
+// Update insights
+function updateInsights() {
+    const totalMessages = messagesData.length;
+    document.getElementById('total-messages').textContent = totalMessages;
+    
+    if (messagesData.length > 0) {
+        const positiveRatio = messagesData.filter(msg => msg.sentiment === 'Positive').length / messagesData.length;
+        const negativeRatio = messagesData.filter(msg => msg.sentiment === 'Negative').length / messagesData.length;
+        const avgRating = (4.5 * positiveRatio + 2.5 * negativeRatio + 3.5 * (1 - positiveRatio - negativeRatio)).toFixed(1);
+        document.getElementById('avg-rating').textContent = avgRating;
+        
+        const themes = generateKeyThemes();
+        document.getElementById('key-themes').textContent = themes;
+    } else {
+        document.getElementById('avg-rating').textContent = '0.0';
+        document.getElementById('key-themes').textContent = 'Awaiting customer messages...';
+    }
+}
+
+// Generate key themes from data
+function generateKeyThemes() {
+    if (messagesData.length === 0) return 'Awaiting customer messages...';
+    
+    const emotions = {};
+    const sentiments = {};
+    
+    messagesData.forEach(msg => {
+        if (msg.emotion && msg.emotion !== 'Error') {
+            emotions[msg.emotion] = (emotions[msg.emotion] || 0) + 1;
+        }
+        if (msg.sentiment) {
+            sentiments[msg.sentiment] = (sentiments[msg.sentiment] || 0) + 1;
+        }
+    });
+    
+    const topEmotion = Object.entries(emotions).sort(([,a], [,b]) => b - a)[0];
+    const topSentiment = Object.entries(sentiments).sort(([,a], [,b]) => b - a)[0];
+    
+    if (!topEmotion || !topSentiment) return 'Analyzing patterns...';
+    
+    const themes = [];
+    if (topSentiment[0] === 'Positive') {
+        themes.push('Generally satisfied customers');
+    } else if (topSentiment[0] === 'Negative') {
+        themes.push('Areas needing improvement');
+    } else {
+        themes.push('Mixed feedback patterns');
+    }
+    
+    if (topEmotion[0] === 'Joy') {
+        themes.push('Happy customer experiences');
+    } else if (topEmotion[0] === 'Anger') {
+        themes.push('Frustrated customer interactions');
+    } else if (topEmotion[0] === 'Neutral') {
+        themes.push('Balanced emotional responses');
+    }
+    
+    return themes.length > 0 ? themes.join(', ') : 'Analyzing customer feedback patterns';
+}
+
+// Update alert status
+function updateAlertStatus() {
+    if (messagesData.length === 0) {
+        const alertDiv = document.getElementById('alert-status');
+        alertDiv.innerHTML = `
+            <p>🔄 System Ready</p>
+            <p style="opacity: 0.7; font-size: 0.9rem;">
+                Waiting for customer messages to analyze
+            </p>
+        `;
+        return;
+    }
+    
+    const negativeCount = messagesData.filter(msg => msg.sentiment === 'Negative').length;
+    const negativePercentage = (negativeCount / messagesData.length) * 100;
+    
+    const alertDiv = document.getElementById('alert-status');
+    
+    if (negativePercentage > 40) {
+        alertDiv.innerHTML = `
+            <p>⚠️ High negative sentiment detected</p>
+            <p style="opacity: 0.7; font-size: 0.9rem;">
+                ${negativePercentage.toFixed(1)}% negative messages (${negativeCount}/${messagesData.length})
+            </p>
+        `;
+    } else if (negativeCount >= 2) {
+        alertDiv.innerHTML = `
+            <p>⚠️ Multiple negative messages detected</p>
+            <p style="opacity: 0.7; font-size: 0.9rem;">
+                ${negativeCount} negative messages found
+            </p>
+        `;
+    } else {
+        alertDiv.innerHTML = `
+            <p>✅ All systems normal</p>
+            <p style="opacity: 0.7; font-size: 0.9rem;">
+                Last checked: <span id="last-check">Just now</span>
+            </p>
+        `;
+    }
+}
+
+// Scroll reveal animation
+function revealOnScroll() {
+    const elements = document.querySelectorAll('.scroll-reveal');
+    elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+            element.classList.add('revealed');
+        }
+    });
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🧠 MindBridge AI Platform Initializing...');
+    console.log('🔗 n8n Integration Mode: Production');
+    console.log('📡 Webhook URL:', N8N_CONFIG.ANALYZE_URL);
+    
+    createParticles();
+    
+    // Set up scroll reveal
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+    
+// Load existing data on startup
+loadData();
+    updateConnectionStatus(false); // Will be updated when first request succeeds
+    
+    console.log('✅ MindBridge AI Platform Ready!');
+    console.log('💡 Submit a message to test your n8n integration!');
+});
+
+// Handle Enter key in textarea
+document.addEventListener('keydown', function(e) {
+    if (e.target.id === 'customer-message' && e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        submitMessage();
+    }
+});
+    </script>
+</body>
+</html>

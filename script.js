@@ -118,20 +118,31 @@ async function submitMessage() {
         const result = await response.json();
         console.log('n8n response:', result);
         
-        // Handle n8n response format
-        let sentiment, emotion;
-        
-        if (result.sentiment && result.emotion) {
-            // Direct format from n8n
-            sentiment = result.sentiment;
-            emotion = result.emotion;
-        } else if (result.data && result.data.sentiment) {
-            // Nested format
-            sentiment = result.data.sentiment;
-            emotion = result.data.emotion;
-        } else {
-            throw new Error('Invalid response format from n8n');
-        }
+// Handle n8n response format with better error checking
+let sentiment, emotion;
+
+console.log('Full n8n response structure:', JSON.stringify(result, null, 2));
+
+if (result && typeof result === 'object') {
+    // Try different possible response structures
+    if (result.sentiment) {
+        sentiment = result.sentiment;
+        emotion = result.emotion || 'unknown';
+    } else if (result.data && result.data.sentiment) {
+        sentiment = result.data.sentiment;
+        emotion = result.data.emotion || 'unknown';
+    } else if (result[0] && result[0].sentiment) {
+        // Array response format
+        sentiment = result[0].sentiment;
+        emotion = result[0].emotion || 'unknown';
+    } else {
+        console.error('Unexpected n8n response format:', result);
+        sentiment = 'neutral';
+        emotion = 'processing_error';
+    }
+} else {
+    throw new Error('Invalid response format from n8n');
+}
         
         // Add to local data
         const newMessage = {
@@ -174,20 +185,77 @@ async function submitMessage() {
 
 // Process Google Sheets data format
 function processSheetData(rawData) {
-    if (!rawData || rawData.length === 0) return [];
-
-    // rawData is array of objects from n8n
-    return rawData.map(row => {
+    // Handle different response formats from Google Sheets API
+    let dataArray = rawData;
+    
+// Check if rawData is wrapped in an object
+if (!Array.isArray(rawData)) {
+    if (rawData.values) {
+        dataArray = rawData.values;
+    } else if (rawData.data) {
+        dataArray = rawData.data;
+} else if (rawData['object Object']) {
+    // Handle the specific case where data is nested under "object Object" key
+    const singleRow = rawData['object Object'];
+    console.log('Found data under "object Object" key:', singleRow);
+    
+    // Convert single object to array format that matches Google Sheets structure
+    if (singleRow && typeof singleRow === 'object') {
+        // Create array with header row and data row
+        dataArray = [
+            ['timestamp', 'message', 'sentiment', 'confidence', 'explanation'], // Header
+            [
+                singleRow.timestamp || '',
+                singleRow.message || '',
+                singleRow.sentiment || '',
+                singleRow.confidence || '',
+                singleRow.explanation || ''
+            ] // Data row
+        ];
+        console.log('Converted single object to array format:', dataArray);
+    } else {
+        console.error('Invalid single row data:', singleRow);
+        return [];
+    }
+    } else {
+        // Try to extract from the first key if it contains array-like data
+        const keys = Object.keys(rawData);
+        if (keys.length === 1) {
+            const firstKey = keys[0];
+            const firstValue = rawData[firstKey];
+            if (Array.isArray(firstValue)) {
+                dataArray = firstValue;
+                console.log(`Found array data under key "${firstKey}"`);
+            } else if (firstValue && typeof firstValue === 'object') {
+                // Single row of data
+                dataArray = [firstValue];
+                console.log('Converting single object to array');
+            }
+        }
+        
+        if (!Array.isArray(dataArray)) {
+            console.error('Expected array but got:', typeof rawData, rawData);
+            return [];
+        }
+    }
+}
+    // Skip header row and process data
+    if (!dataArray || dataArray.length <= 1) return [];
+    
+    return dataArray.slice(1).map(row => {
+        // Google Sheets returns arrays for each row
+        // [timestamp, message, sentiment, confidence, explanation]
+        const [timestamp, message, sentiment, confidence, explanation] = row;
+        
         return {
-            timestamp: row.timestamp ? new Date(row.timestamp).toISOString() : new Date().toISOString(),
-            message: row.message || '',
-            sentiment: row.sentiment || 'Neutral',
-            emotion: row.explanation || '',  // explanation used as emotion
-            confidence: parseFloat(row.confidence) || 0.5
+            timestamp: new Date(timestamp).toISOString(),
+            message: message || '',
+            sentiment: sentiment || 'neutral',
+            emotion: explanation || '', // Use explanation as emotion for now
+            confidence: parseFloat(confidence) || 0.5
         };
     }).filter(item => item.message); // Filter out empty messages
 }
-
 
 // Load data from n8n (placeholder for now)
 async function loadData() {
@@ -224,7 +292,11 @@ if (!response.ok) {
 
 const rawData = await response.json();
 console.log('Raw data from Google Sheets:', rawData);
-
+console.log('Raw data type:', typeof rawData);
+console.log('Is array?', Array.isArray(rawData));
+if (rawData && typeof rawData === 'object' && !Array.isArray(rawData)) {
+    console.log('Object keys:', Object.keys(rawData));
+}
 // Process the Google Sheets data
 messagesData = processSheetData(rawData);
 updateDashboard();

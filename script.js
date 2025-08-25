@@ -1,8 +1,8 @@
         // Configuration - Updated with your actual n8n webhook URLs
 const N8N_CONFIG = {
     // Your actual n8n webhook endpoints
-    ANALYZE_URL: 'https://ankanbh1.app.n8n.cloud/webhook-test/analyze-sentiment',
-GET_DATA_URL: 'https://ankanbh1.app.n8n.cloud/webhook-test/get-messages', // We'll create this next
+    ANALYZE_URL: 'https://ankanbh1.app.n8n.cloud/webhook/analyze-sentiment',
+GET_DATA_URL: 'https://ankanbh1.app.n8n.cloud/webhook/get-messages', // We'll create this next
     // Switch to production mode
     DEMO_MODE: false
 };

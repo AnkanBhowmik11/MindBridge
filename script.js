@@ -174,23 +174,20 @@ async function submitMessage() {
 
 // Process Google Sheets data format
 function processSheetData(rawData) {
-    // Skip header row and process data
-    if (!rawData || rawData.length <= 1) return [];
-    
-    return rawData.slice(1).map(row => {
-        // Google Sheets returns arrays for each row
-        // [timestamp, message, sentiment, confidence, explanation]
-        const [timestamp, message, sentiment, confidence, explanation] = row;
-        
+    if (!rawData || rawData.length === 0) return [];
+
+    // rawData is array of objects from n8n
+    return rawData.map(row => {
         return {
-            timestamp: new Date(timestamp).toISOString(),
-            message: message || '',
-            sentiment: sentiment || 'neutral',
-            emotion: explanation || '', // Use explanation as emotion for now
-            confidence: parseFloat(confidence) || 0.5
+            timestamp: row.timestamp ? new Date(row.timestamp).toISOString() : new Date().toISOString(),
+            message: row.message || '',
+            sentiment: row.sentiment || 'Neutral',
+            emotion: row.explanation || '',  // explanation used as emotion
+            confidence: parseFloat(row.confidence) || 0.5
         };
     }).filter(item => item.message); // Filter out empty messages
 }
+
 
 // Load data from n8n (placeholder for now)
 async function loadData() {

@@ -188,57 +188,85 @@ function processSheetData(rawData) {
     // Handle different response formats from Google Sheets API
     let dataArray = rawData;
     
-// Check if rawData is wrapped in an object
-if (!Array.isArray(rawData)) {
-    if (rawData.values) {
-        dataArray = rawData.values;
-    } else if (rawData.data) {
-        dataArray = rawData.data;
-} else if (rawData['object Object']) {
-    // Handle the specific case where data is nested under "object Object" key
-    const singleRow = rawData['object Object'];
-    console.log('Found data under "object Object" key:', singleRow);
-    
-    // Convert single object to array format that matches Google Sheets structure
-    if (singleRow && typeof singleRow === 'object') {
-        // Create array with header row and data row
-        dataArray = [
-            ['timestamp', 'message', 'sentiment', 'confidence', 'explanation'], // Header
-            [
-                singleRow.timestamp || '',
-                singleRow.message || '',
-                singleRow.sentiment || '',
-                singleRow.confidence || '',
-                singleRow.explanation || ''
-            ] // Data row
-        ];
-        console.log('Converted single object to array format:', dataArray);
-    } else {
-        console.error('Invalid single row data:', singleRow);
-        return [];
-    }
-    } else {
-        // Try to extract from the first key if it contains array-like data
-        const keys = Object.keys(rawData);
-        if (keys.length === 1) {
-            const firstKey = keys[0];
-            const firstValue = rawData[firstKey];
-            if (Array.isArray(firstValue)) {
-                dataArray = firstValue;
-                console.log(`Found array data under key "${firstKey}"`);
-            } else if (firstValue && typeof firstValue === 'object') {
-                // Single row of data
-                dataArray = [firstValue];
-                console.log('Converting single object to array');
+    // Check if rawData is wrapped in an object
+    if (!Array.isArray(rawData)) {
+        if (rawData.values) {
+            dataArray = rawData.values;
+        } else if (rawData.data) {
+            dataArray = rawData.data;
+        } else if (rawData['object Object']) {
+            // Handle the specific case where data is nested under "object Object" key
+            const singleRow = rawData['object Object'];
+            console.log('Found data under "object Object" key:', singleRow);
+            
+            // Convert single object to array format that matches Google Sheets structure
+            if (singleRow && typeof singleRow === 'object') {
+                // Create array with header row and data row
+                dataArray = [
+                    ['timestamp', 'message', 'sentiment', 'confidence', 'explanation'], // Header
+                    [
+                        singleRow.timestamp || '',
+                        singleRow.message || '',
+                        singleRow.sentiment || '',
+                        singleRow.confidence || '',
+                        singleRow.explanation || ''
+                    ] // Data row
+                ];
+                console.log('Converted single object to array format:', dataArray);
+            } else {
+                console.error('Invalid single row data:', singleRow);
+                return [];
+            }
+        } else {
+            // Handle case where rawData might contain multiple items in different structure
+            console.log('Attempting to extract all items from rawData:', rawData);
+            
+            // Try to find all the data items
+            let allItems = [];
+            
+            // Check if rawData has numbered keys (like "0", "1", "2", etc.)
+            const keys = Object.keys(rawData);
+            const numericKeys = keys.filter(key => !isNaN(key)).sort((a, b) => Number(a) - Number(b));
+            
+            if (numericKeys.length > 0) {
+                // Extract items by numeric keys
+                allItems = numericKeys.map(key => rawData[key]);
+                console.log('Found items with numeric keys:', allItems);
+                
+                // Convert to array format
+                dataArray = [['timestamp', 'message', 'sentiment', 'confidence', 'explanation']]; // Header
+                
+                allItems.forEach(item => {
+                    dataArray.push([
+                        item.timestamp || '', item.message || '', item.sentiment || '',
+                        item.confidence || '', item.explanation || ''
+                    ]);
+                });
+                
+                console.log('Final dataArray with', allItems.length, 'items:', dataArray);
+            } else {
+                // Try to extract from the first key if it contains array-like data
+                if (keys.length === 1) {
+                    const firstKey = keys[0];
+                    const firstValue = rawData[firstKey];
+                    if (Array.isArray(firstValue)) {
+                        dataArray = firstValue;
+                        console.log(`Found array data under key "${firstKey}"`);
+                    } else if (firstValue && typeof firstValue === 'object') {
+                        // Single row of data
+                        dataArray = [firstValue];
+                        console.log('Converting single object to array');
+                    }
+                }
+                
+                if (!Array.isArray(dataArray)) {
+                    console.error('Expected array but got:', typeof rawData, rawData);
+                    return [];
+                }
             }
         }
-        
-        if (!Array.isArray(dataArray)) {
-            console.error('Expected array but got:', typeof rawData, rawData);
-            return [];
-        }
     }
-}
+    
     // Skip header row and process data
     if (!dataArray || dataArray.length <= 1) return [];
     

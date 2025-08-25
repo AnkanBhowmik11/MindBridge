@@ -338,9 +338,12 @@ function updateSentimentStats() {
         return;
     }
     
-    const positive = messagesData.filter(msg => msg.sentiment === 'Positive').length;
-    const negative = messagesData.filter(msg => msg.sentiment === 'Negative').length;
-    const neutral = messagesData.filter(msg => msg.sentiment === 'Neutral').length;
+const positive = messagesData.filter(msg => 
+    msg.sentiment && msg.sentiment.toLowerCase() === 'positive').length;
+const negative = messagesData.filter(msg => 
+    msg.sentiment && msg.sentiment.toLowerCase() === 'negative').length;
+const neutral = messagesData.filter(msg => 
+    msg.sentiment && msg.sentiment.toLowerCase() === 'neutral').length;
     const total = messagesData.length;
     
     document.getElementById('positive-percent').textContent = Math.round((positive / total) * 100) + '%';
